@@ -1,0 +1,32 @@
+rootProject.name = 'employee-task-management'
+
+// Enable Gradle features
+enableFeaturePreview('VERSION_CATALOGS')
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'org.springframework.boot') {
+                useVersion('3.2.2')
+            }
+            if (requested.id.id == 'io.spring.dependency-management') {
+                useVersion('1.1.4')
+            }
+        }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("https://repo.spring.io/release")
+        }
+    }
+}

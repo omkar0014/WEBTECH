@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.college'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootJar {
+    archiveFileName = 'employee-task-management.jar'
+}
+
+task buildApp {
+    dependsOn clean, build
+    doLast {
+        println "✅ Application built successfully!"
+        println "📦 Artifact: build/libs/${bootJar.archiveFileName.get()}"
+    }
+}
+
+task runApp {
+    dependsOn bootRun
+    doLast {
+        println "🚀 Application started on http://localhost:8080"
+    }
+}
+
+task info {
+    doLast {
+        println "=".repeat(50)
+        println "Employee Task Management System"
+        println "=".repeat(50)
+        println "Project: ${group}:${name}:${version}"
+        println "Source Compatibility: ${sourceCompatibility}"
+        println ""
+        println "Available Tasks:"
+        println "  gradle clean          - Clean build artifacts"
+        println "  gradle build          - Build the project"
+        println "  gradle buildApp       - Build with notifications"
+        println "  gradle bootRun        - Run the application"
+        println "  gradle runApp         - Run with notifications"
+        println "  gradle test           - Run tests"
+        println "  gradle bootJar        - Build JAR file"
+        println ""
+        println "Build Directory: build/"
+        println "=".repeat(50)
+    }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${task.id != null} ? 'Edit Task' : 'Create Task'">Task Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/employees}">👥 Employee Task Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/employees}">Employees</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/tasks}">Tasks</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 700px;">
+    <h2 th:text="${task.id != null} ? '✏️ Edit Task' : '➕ Create New Task'">Create Task</h2>
+    
+    <form th:action="@{/tasks/save}" th:object="${task}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        
+        <div class="mb-3">
+            <label class="form-label">📌 Task Title</label>
+            <input type="text" class="form-control" th:field="*{title}" placeholder="Enter task title" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">📝 Description</label>
+            <textarea class="form-control" rows="4" th:field="*{description}" placeholder="Provide detailed task description" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">📅 Due Date</label>
+            <input type="date" class="form-control" th:field="*{dueDate}" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">🔔 Status</label>
+            <select class="form-select" th:field="*{status}" required>
+                <option value="" disabled th:selected="true">-- Select Status --</option>
+                <option th:each="statusOption : ${statusOptions}" th:value="${statusOption}" th:text="${statusOption}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">👤 Assign to Faculty Member</label>
+            <select class="form-select" th:field="*{employee.id}" required>
+                <option value="" disabled th:selected="${task.employee == null}">-- Select Faculty Member --</option>
+                <option th:each="employee : ${employees}" 
+                    th:value="${employee.id}" 
+                    th:text="${employee.name}"
+                    th:selected="${task.employee != null and employee.id == task.employee.id}"></option>
+            </select>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-success flex-grow-1">✅ Save Task</button>
+            <a th:href="@{/tasks}" class="btn btn-secondary flex-grow-1">❌ Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
